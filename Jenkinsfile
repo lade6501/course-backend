@@ -5,10 +5,7 @@ pipeline {
         dockerImage = ''
 
     }
-
-    agent {
-        any 
-    }
+    agent any 
 
     stages {
         stage('Cloning Git') {
@@ -16,15 +13,17 @@ pipeline {
             git([url: 'https://github.com/lade6501/course-backend.git', branch: 'master', credentialsId: 'git_token'])
             }
         }
+
         stage('Building image') {
-            steps{
+            steps {
                 script {
                 dockerImage = docker build -t  imagename .
                 }
             }
         }
+
         stage('Deploy Image') {
-            steps{
+            steps {
                 script {
                     docker.withRegistry( '', dockerCredential ) {
                         dockerImage.push("$BUILD_NUMBER")
@@ -33,6 +32,5 @@ pipeline {
                 }
             }
         }
-        
     }
 }
