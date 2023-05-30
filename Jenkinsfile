@@ -1,6 +1,6 @@
 pipeline {
   environment {
-    imagename = "course-backend"
+    imagename = "lade6501/course-backend"
     registryCredential = 'docker-token'
     dockerImage = ''
   }
