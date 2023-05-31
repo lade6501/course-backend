@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 
-courses_uri = process.env.COURSES_MONGO_URI;
-users_uri = process.env.USERS_MONGO_URI;
+//dynamic mongo uri getting from docker env variable
+const courses_uri = `${process.env.mongouri}/courses`;
+const users_uri = `${process.env.mongouri}/users`;
 
 const connectToDb = (db) => {
   const uri = db === "courses" ? courses_uri : users_uri;
