@@ -7,21 +7,28 @@ con.on("open", () => {
   console.log(`✔  Course Database Started`);
 });
 
+//Controller for getting all courses from db
 const getAllCourses = async (req, res, next) => {
   try {
-    // const response = await ;
-    res.send("Hello Courses");
-  } catch (error) {}
+    const courses = await Courses.find({});
+    return res.status(200).json(courses);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
 
+//Controller for getting course from db with specified id
 const getCourseById = async (req, res, next) => {
+  const { id } = req.params;
   try {
-    // const response = await ;
-    const { id } = req.params;
-    res.send(`Hello Courses ${id}`);
-  } catch (error) {}
+    const courses = await Courses.find({ _id: id });
+    return res.status(200).json(courses);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
 
+//Controller for adding a new course to db
 const saveCourse = async (req, res, next) => {
   const courseObj = new Courses({
     name: req.body.name,
@@ -30,7 +37,6 @@ const saveCourse = async (req, res, next) => {
     image: req.body.image,
   });
   try {
-    // const response = await ;
     const course = await courseObj.save();
     res.status(200).json(course);
   } catch (error) {
