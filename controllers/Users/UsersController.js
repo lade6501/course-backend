@@ -9,16 +9,18 @@ con.on("open", () => {
 
 const getAllUsers = async (req, res, next) => {
   try {
-    // const response = await ;
-    res.send("Hello Users");
+    const users = await Users.find({});
+    return res.status(200).json(users);
   } catch (error) {
     res.json({ message: error }).status(500);
   }
 };
 
 const getUserByEmail = async (req, res, next) => {
+  const { email } = req.query;
   try {
-    res.send(`Hello Courses `);
+    const user = await Users.find({ email: email });
+    return res.status(200).json(user);
   } catch (error) {
     res.json({ message: error }).status(500);
   }
