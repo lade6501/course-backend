@@ -29,6 +29,11 @@ const usersSchema = new mongoose.Schema({
       message: (props) => `${props.value} is not a valid phone number!`,
     },
   },
+  bioInfo: {
+    type: String,
+    default: "Some bio",
+    maxLength: [20, "bio cann't be greater than 20 charecters"],
+  },
 });
 
 module.exports = usersSchema;

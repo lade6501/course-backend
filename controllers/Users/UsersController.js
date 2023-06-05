@@ -28,21 +28,30 @@ const getUserByEmail = async (req, res, next) => {
 
 const addUser = async (req, res, next) => {
   const { user } = req.body;
-  console.log(user);
   const userObj = new Users(user);
   try {
     const user = await userObj.save();
-    res.status(200).json(user);
+    res.status(200).json({ message: "User added successfully" });
   } catch (error) {
     res.json({ message: error }).status(500);
   }
 };
 
 const updateUserByEmail = async (req, res, next) => {
+  let { email, name, phone, bioInfo } = req.query;
   try {
-    res.send(`Hello Courses ${id}`);
+    const user = await Users.find({ email: email });
+    name = name || user[0].name;
+    phone = phone || user[0].phone;
+    bioInfo = bioInfo || user[0].bioInfo;
+
+    const updatedUser = await Users.updateOne(
+      { email },
+      { $set: { name, phone, bioInfo } }
+    );
+    return res.status(200).json({ message: "Updated Successfully" });
   } catch (error) {
-    res.json({ message: error }).status(500);
+    res.status(400).json({ error });
   }
 };
 
