@@ -30,7 +30,8 @@ const addUser = async (req, res, next) => {
   const { user } = req.body;
 
   //Generating hash using 10 round salt
-  const hash = await bcrypt.hash(user.password, 10);
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(user.password, saltRounds);
   user["password"] = hash;
 
   const userObj = new Users(user);
