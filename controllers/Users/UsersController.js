@@ -1,6 +1,6 @@
 const connectToDb = require("../../config/db");
 const usersSchema = require("../../models/Users/Users");
-
+const bcrypt = require("bcrypt");
 const con = connectToDb("users");
 const Users = con.model("users", usersSchema);
 con.on("open", () => {
@@ -28,6 +28,11 @@ const getUserByEmail = async (req, res, next) => {
 
 const addUser = async (req, res, next) => {
   const { user } = req.body;
+
+  //Generating hash using 10 round salt
+  const hash = await bcrypt.hash(user.password, 10);
+  user["password"] = hash;
+
   const userObj = new Users(user);
   try {
     const user = await userObj.save();
