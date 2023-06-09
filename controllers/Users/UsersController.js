@@ -61,4 +61,32 @@ const updateUserByEmail = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUsers, getUserByEmail, addUser, updateUserByEmail };
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ email });
+
+    if (user) {
+      const result = await bcrypt.compare(password, user.password);
+      if (result) {
+        return res.status(200).json({ message: "Login successful" });
+      } else {
+        return res.status(401).json({ message: "Invalid Password" });
+      }
+    }
+
+    return res
+      .status(401)
+      .json({
+        message: `User not found with given email ${email} please check `,
+      });
+  } catch (error) {}
+};
+module.exports = {
+  getAllUsers,
+  getUserByEmail,
+  addUser,
+  updateUserByEmail,
+  login,
+};
