@@ -2,6 +2,8 @@ const connectToDb = require("../../config/db");
 const usersSchema = require("../../models/Users/Users");
 const bcrypt = require("bcrypt");
 const con = connectToDb("users");
+const JWT = require("jsonwebtoken")
+const JWTSecretKey = process.env.jwtsecret 
 const Users = con.model("users", usersSchema);
 con.on("open", () => {
   console.log(`✔  User Database Started`);
@@ -70,7 +72,8 @@ const login = async (req, res) => {
     if (user) {
       const result = await bcrypt.compare(password, user.password);
       if (result) {
-        return res.status(200).json({ message: "Login successful" });
+        const token = JWT.sign({user},JWTSecretKey)
+        return res.status(200).json({ message: "Login successful",authtoken : token });
       } else {
         return res.status(401).json({ message: "Invalid Password" });
       }
