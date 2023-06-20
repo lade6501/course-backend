@@ -75,14 +75,14 @@ const login = async (req, res) => {
         const token = JWT.sign({user},JWTSecretKey)
         return res.status(200).json({ message: "Login successful",authtoken : token });
       } else {
-        return res.status(401).json({ message: "Invalid Password" });
+        return res.status(200).json({ error: "Invalid Password" });
       }
     }
 
     return res
-      .status(401)
+      .status(200)
       .json({
-        message: `User not found with given email ${email} please check `,
+        error: `User not found with given email ${email} please check `,
       });
   } catch (error) {}
 };
