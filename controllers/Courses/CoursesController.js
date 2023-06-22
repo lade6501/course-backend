@@ -38,9 +38,9 @@ const saveCourse = async (req, res, next) => {
   });
   try {
     const course = await courseObj.save();
-    res.status(201).json(course);
+    res.status(200).json(course);
   } catch (error) {
-    res.json({ message: error }).status(400);
+    res.json({ message: error }).status(500);
   }
 };
 module.exports = { getAllCourses, getCourseById, saveCourse };
