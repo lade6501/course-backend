@@ -1,8 +1,8 @@
 const connectToDb = require("../../config/db");
 const usersSchema = require("../../models/Users/Users");
 const bcrypt = require("bcrypt");
-const JWT = require("jsonwebtoken")
-const JWTSecretKey = process.env.jwtsecret || 'course-backend'
+const JWT = require("jsonwebtoken");
+const JWTSecretKey = process.env.jwtsecret || "course-backend";
 const con = connectToDb("users");
 const Users = con.model("users", usersSchema);
 con.on("open", () => {
@@ -67,26 +67,34 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await Users.findOne({ email });
-    console.log('User',user);
+    let user = await Users.findOne({ email });
     if (user) {
       const result = await bcrypt.compare(password, user.password);
       if (result) {
-        const token = JWT.sign({user},JWTSecretKey)
-        return res.status(200).json({ message: "Login successful" ,token});
+        const token = JWT.sign({ user }, JWTSecretKey);
+        const { name, email, phone, bioInfo } = user;
+        const userObj = {
+          name,
+          email,
+          phone,
+          bioInfo,
+        };
+        return res
+          .status(200)
+          .json({ message: "Login successful", token, userObj });
       } else {
         return res.status(200).json({ error: "Invalid Password" });
       }
     }
 
-    return res
-      .status(200)
-      .json({
-        error: `User not found with given email ${email} please check `
-      });
-  } catch (error) {}
+    return res.status(200).json({
+      error: `User not found with given email ${email} please check `,
+    });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 };
-module.exports = { 
+module.exports = {
   getAllUsers,
   getUserByEmail,
   addUser,
