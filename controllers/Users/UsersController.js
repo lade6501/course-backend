@@ -46,7 +46,8 @@ const addUser = async (req, res, next) => {
 };
 
 const updateUserByEmail = async (req, res, next) => {
-  let { email, name, phone, bioInfo } = req.query;
+  let { email } = req.query;
+  let {name, phone, bioInfo} = req.body;
   try {
     const user = await Users.find({ email: email });
     name = name || user[0].name;
