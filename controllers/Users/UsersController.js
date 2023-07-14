@@ -47,12 +47,20 @@ const addUser = async (req, res, next) => {
 
 const updateUserByEmail = async (req, res, next) => {
   let { email } = req.query;
-  let {name, phone, bioInfo} = req.body;
+  let { name, phone, bioInfo, isNewEmail, newEmail } = req.body;
+  console.log(isNewEmail, newEmail);
   try {
     const user = await Users.find({ email: email });
     name = name || user[0].name;
     phone = phone || user[0].phone;
     bioInfo = bioInfo || user[0].bioInfo;
+
+    if (isNewEmail) {
+      const updatedUser = await Users.updateOne(
+        { email },
+        { $set: { name, phone, bioInfo, email: newEmail } }
+      );
+    }
 
     const updatedUser = await Users.updateOne(
       { email },
