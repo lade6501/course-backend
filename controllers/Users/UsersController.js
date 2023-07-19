@@ -96,9 +96,35 @@ const login = async (req, res) => {
       }
     }
 
-    return res.status(200).json({
+    return res.status(404).json({
       error: `User not found with given email ${email} please check `,
     });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
+
+const passwordChange = async (req, res) => {
+  const { email, newpassword, oldpassword } = req.body;
+  try {
+    let user = await Users.findOne({ email });
+    const result = await bcrypt.compare(oldpassword, user.password);
+    if (result) {
+      //Generating password hash
+      const saltRounds = 10;
+      const hash = await bcrypt.hash(newpassword, saltRounds);
+
+      //Updating user password
+      const updatedUser = await Users.updateOne(
+        { email },
+        { $set: { password: hash } }
+      );
+
+      return res.status(200).json({ message: "Updated Successfully" });
+    }
+    return res
+      .status(401)
+      .json({ error: "Old password is wrong please check!" });
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -109,4 +135,5 @@ module.exports = {
   addUser,
   updateUserByEmail,
   login,
+  passwordChange,
 };
