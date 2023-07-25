@@ -34,6 +34,14 @@ const usersSchema = new mongoose.Schema({
     default: "Some bio",
     maxLength: [20, "bio cann't be greater than 20 charecters"],
   },
+  courses : [
+    {
+      name: { type: String},
+      description: { type: String },
+      rating: { type: Number},
+      image: { type: String},
+    }
+  ]
 });
 
 module.exports = usersSchema;
