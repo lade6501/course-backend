@@ -129,6 +129,19 @@ const passwordChange = async (req, res) => {
     return res.status(400).json(error);
   }
 };
+
+const addCourse = async (req, res) => {
+  const { email, course } = req.body;
+  try {
+    const updatedUser = await Users.updateOne(
+      { email },
+      { $push: { courses: course } }
+    );
+    return res.status(200).json({ message: "Course enrolled sucessfully" });
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+};
 module.exports = {
   getAllUsers,
   getUserByEmail,
@@ -136,4 +149,5 @@ module.exports = {
   updateUserByEmail,
   login,
   passwordChange,
+  addCourse,
 };
