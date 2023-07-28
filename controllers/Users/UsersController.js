@@ -81,12 +81,13 @@ const login = async (req, res) => {
       const result = await bcrypt.compare(password, user.password);
       if (result) {
         const token = JWT.sign({ user }, JWTSecretKey);
-        const { name, email, phone, bioInfo } = user;
+        const { name, email, phone, bioInfo, courses } = user;
         const userObj = {
           name,
           email,
           phone,
           bioInfo,
+          courses,
         };
         return res
           .status(200)
