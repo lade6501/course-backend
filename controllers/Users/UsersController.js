@@ -41,7 +41,7 @@ const addUser = async (req, res, next) => {
     const user = await userObj.save();
     res.status(200).json({ message: "User added successfully" });
   } catch (error) {
-    res.json({ message: error }).status(500);
+    res.status(500).json({ error });
   }
 };
 
