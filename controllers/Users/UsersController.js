@@ -134,11 +134,14 @@ const passwordChange = async (req, res) => {
 const addCourse = async (req, res) => {
   const { email, course } = req.body;
   try {
-    const updatedUser = await Users.updateOne(
+    const updatedUser = await Users.findOneAndUpdate(
       { email },
-      { $push: { courses: course } }
+      { $push: { courses: course } },
+      { returnDocument: "after" }
     );
-    return res.status(200).json({ message: "Course enrolled sucessfully" });
+    return res
+      .status(200)
+      .json({ message: "Course enrolled sucessfully", user: updatedUser });
   } catch (error) {
     return res.status(400).json(error);
   }
